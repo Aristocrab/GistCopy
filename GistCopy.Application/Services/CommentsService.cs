@@ -13,10 +13,12 @@ namespace GistCopy.Application.Services;
 public class CommentsService
 {
     private readonly ApplicationDbContext _dbContext;
+    private readonly IValidator<Comment> _validator;
 
-    public CommentsService(ApplicationDbContext dbContext)
+    public CommentsService(ApplicationDbContext dbContext, IValidator<Comment> validator)
     {
         _dbContext = dbContext;
+        _validator = validator;
     }
 
     public async Task<List<GetCommentDto>> GetGistComments(Guid gistId)
@@ -39,6 +41,11 @@ public class CommentsService
         if (gist is not null)
         {
             var comment = addCommentDto.Adapt<Comment>();
+            var result = await _validator.ValidateAsync(comment);
+            if (!result.IsValid)
+            {
+                throw new ValidationException(result.Errors);
+            }
             
             gist.Comments = new List<Comment>
             {

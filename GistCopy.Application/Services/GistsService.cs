@@ -14,10 +14,12 @@ namespace GistCopy.Application.Services;
 public class GistsService
 {
     private readonly ApplicationDbContext _dbContext;
+    private readonly IValidator<Gist> _validator;
 
-    public GistsService(ApplicationDbContext dbContext)
+    public GistsService(ApplicationDbContext dbContext, IValidator<Gist> validator)
     {
         _dbContext = dbContext;
+        _validator = validator;
     }
     
     public List<GetGistDto> GetAll()
@@ -40,6 +42,12 @@ public class GistsService
     public async Task<Guid> CreateGist(CreateGistDto createGistDto)
     {
         var gist = createGistDto.Adapt<Gist>();
+        
+        var result = await _validator.ValidateAsync(gist);
+        if (!result.IsValid)
+        {
+            throw new ValidationException(result.Errors);
+        }
 
         _dbContext.Gists.Add(gist);
         await _dbContext.SaveChangesAsync();

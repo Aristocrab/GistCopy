@@ -1,5 +1,7 @@
-﻿using GistCopy.Application;
+﻿using FluentValidation;
+using GistCopy.Application;
 using GistCopy.Application.Services;
+using GistCopy.Application.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +19,10 @@ public static class ServicesExtensions
         // DbContext
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite(configuration.GetConnectionString(nameof(ApplicationDbContext))));
-
+        
+        // Validators
+        services.AddValidatorsFromAssemblyContaining<GistValidator>();
+        
         // Services
         services.AddScoped<GistsService>();
         services.AddScoped<CommentsService>();
