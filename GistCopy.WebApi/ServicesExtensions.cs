@@ -5,6 +5,8 @@ using GistCopy.Application.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using Serilog.Events;
 
 namespace GistCopy.WebApi;
 

@@ -7,7 +7,7 @@ public abstract class EntityBase
     public Guid Id { get; set; }
     public DateTime TimeCreated { get; }
 
-    public EntityBase()
+    protected EntityBase()
     {
         TimeCreated = DateTime.Now;
     }
