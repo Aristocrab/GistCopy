@@ -1,11 +1,7 @@
-﻿using System;
-using System.Globalization;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 using FluentValidation;
 using GistCopy.Domain.Exceptions;
-using Microsoft.AspNetCore.Http;
 
 namespace GistCopy.WebApi.Middlewares;
 

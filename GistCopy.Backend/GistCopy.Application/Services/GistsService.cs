@@ -8,7 +8,6 @@ using GistCopy.Domain.Exceptions;
 using GistCopy.Application.Dto;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace GistCopy.Application.Services;
 

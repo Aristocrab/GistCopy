@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-
-namespace GistCopy.WebApi.Middlewares;
+﻿namespace GistCopy.WebApi.Middlewares;
 
 public static class CustomExceptionHandlerMiddlewareExtensions
 {

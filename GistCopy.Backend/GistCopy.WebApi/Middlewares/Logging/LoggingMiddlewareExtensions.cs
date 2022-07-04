@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-
-namespace GistCopy.WebApi.Middlewares.Logging;
+﻿namespace GistCopy.WebApi.Middlewares.Logging;
 
 public static class LoggingMiddlewareExtensions
 {

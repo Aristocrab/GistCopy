@@ -3,8 +3,6 @@ using GistCopy.Application;
 using GistCopy.Application.Services;
 using GistCopy.Application.Validators;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace GistCopy.WebApi.Services;
 

@@ -1,8 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-
-namespace GistCopy.WebApi.Middlewares.Logging;
+﻿namespace GistCopy.WebApi.Middlewares.Logging;
 
 public class LoggingMiddleware
 {

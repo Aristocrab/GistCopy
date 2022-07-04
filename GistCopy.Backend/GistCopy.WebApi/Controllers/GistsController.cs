@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using GistCopy.Application.Dto;
+﻿using GistCopy.Application.Dto;
 using GistCopy.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 

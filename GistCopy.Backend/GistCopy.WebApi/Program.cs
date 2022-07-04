@@ -1,7 +1,6 @@
 using GistCopy.WebApi.Middlewares;
 using GistCopy.WebApi.Middlewares.Logging;
 using GistCopy.WebApi.Services;
-using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 
