@@ -1,38 +1,16 @@
 <template>
   <Header></Header>
-  <main>
-    <component  :is="ViewComponent" />
+  <main class="main">
+    <router-view/>
   </main>
 </template>
 
 <script>
-import routes from './routes'
-import Header from './components/Header.vue'
+import Header from "@/components/Header";
 
 export default {
   components: {
     Header
-},
-
-  data: () => ({
-    currentRoute: window.location.pathname
-  }),
-
-  computed: {
-    ViewComponent () {
-      const matchingPage = routes[this.currentRoute]
-      return require(`./pages/${matchingPage}.vue`).default
-    }
-  },
-
-  render () {
-    return h(this.ViewComponent)
-  },
-
-  created () {
-    window.addEventListener('popstate', () => {
-      this.currentRoute = window.location.pathname
-    })
   }
 }
 </script>

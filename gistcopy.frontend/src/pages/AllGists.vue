@@ -2,20 +2,20 @@
     <div class="main-column">
         <h1>All gists:</h1>
         <div class="gists" v-for="gist in gists">
-            <Gist 
+            <GistPreview 
                 v-bind:id="gist.id"
                 v-bind:description="gist.description"
                 v-bind:filename="gist.filename"
                 v-bind:text="gist.text"
             >
-            </Gist>
+            </GistPreview>
         </div>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
-import Gist from '../components/Gist'
+import GistPreview from '../components/GistPreview'
 
 export default {
     data() {
@@ -24,7 +24,7 @@ export default {
         }
     },
     components: {
-        Gist
+        GistPreview
     },
     methods: {
         async getAllGists() {

@@ -1,11 +1,8 @@
 <template>
     <div class="gist">
-        <div class="gist__description">
-            <span class="gist__description__input">
-              {{description}}
-              <a href="/all" @click.prevent="deleteGist">✖</a>
-            </span>
-        </div>
+        <router-link :to="'/gist/' + id" class="gist__description">
+            <span class="gist__description__input">{{description}}</span>
+        </router-link>
 
         <div class="gist__filename">
             <span class="gist__filename__input">{{filename}}</span>
@@ -18,23 +15,12 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   props: {
     id: String,
     description: String,
     filename: String,
     text: String,
-  },
-  methods: {
-    async deleteGist() {
-      let del = confirm("Delete?")
-      if (del) {
-        await axios.delete("https://localhost:7005/api/Gists/"+this.$route.params.id)
-        await this.$router.push('/all')
-      }
-    }
   }
 }
 </script>
@@ -60,6 +46,7 @@ export default {
     background-color: var(--secondary-bg-color);
     border-bottom: var(--border);
     padding: 8px 16px 8px 16px;
+    color: var(--text-color);
 }
 
 .gist__description__input {
@@ -69,10 +56,6 @@ export default {
     background-color: rgba(0,0,0,0);
     color: var(--text-color);
     font-size: 16px;
-}
-
-.gist__description__input a {
-    color: var(--text-color);
 }
 
 /* Tabs */
@@ -111,10 +94,5 @@ export default {
 .gist__pre > code {
     word-wrap: break-word;
     display: flex;
-}
-
-a {
-  color: crimson !important;
-  text-decoration: none;
 }
 </style>

@@ -24,7 +24,26 @@ public class GistsService
     
     public List<GetGistDto> GetAll()
     {
-        return _dbContext.Gists.ProjectToType<GetGistDto>().ToList();
+        // First 8 lines of text + ...
+        var config = new TypeAdapterConfig();
+        config.ForType<Gist, GetGistDto>().Map(
+            dest => dest.Text,
+            src => TrimLongText(src.Text, 8));
+        
+        return _dbContext.Gists
+            .ProjectToType<GetGistDto>(config)
+            .ToList();
+    }
+
+    private static string TrimLongText(string text, int maxLength)
+    {
+        if (text.Split('\n').Length > maxLength)
+        {
+            var lines = text.Split('\n').Take(8);
+            return string.Join('\n', lines) + "...";
+        }
+
+        return text;
     }
 
     public async Task<GetGistDto> GetGistById(Guid id)

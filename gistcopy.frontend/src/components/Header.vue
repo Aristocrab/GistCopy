@@ -1,27 +1,17 @@
-<script>
-import VLink from './VLink.vue'
-
-export default {
-  components: {
-    VLink
-  }
-}
-</script>
-
 <template>
   <header class="header">
     <nav class="nav">
         <div class="left">
             <span class="nav__logo">
-                <v-link href="/">Gist copy</v-link>
+                <router-link to="/">Gist copy</router-link>
             </span>
             <span class="nav__items">
                 <ul class="nav__list">
                     <li class="nav__listitem">
-                        <v-link href="/all">All gists</v-link>
+                        <router-link to="/all">All gists</router-link>
                     </li>
                     <li class="nav__listitem">
-                        <v-link href="/my">My gists</v-link>
+                        <router-link to="/my">My gists</router-link>
                     </li>
                 </ul>
             </span>

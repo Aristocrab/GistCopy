@@ -34,13 +34,12 @@ export default {
     },
     methods: {
         async createGist() {
-            axios.post('https://localhost:7005/api/Gists/new', {
+            await axios.post('https://localhost:7005/api/Gists/new', {
                 description: this.description,
                 filename: this.filename,
                 text: this.text,
             })
-            this.$root.currentRoute = "/all"
-            window.history.pushState(null, routes["/all"], "/all")
+            await this.$router.push('/all')
         }
     } 
 }
