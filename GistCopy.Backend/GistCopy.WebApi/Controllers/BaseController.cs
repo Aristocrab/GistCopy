@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
-using GistCopy.Domain.Entities;
+using GistCopy.Application.Dto.User;
 using GistCopy.Domain.Exceptions;
-using GistCopy.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GistCopy.WebApi.Controllers;
@@ -10,7 +9,7 @@ namespace GistCopy.WebApi.Controllers;
 [Route("api/[controller]")]
 public abstract class BaseController : ControllerBase
 {
-    protected UserVm CurrentUser
+    protected UserDto CurrentUser
     {
         get
         {
@@ -18,8 +17,16 @@ public abstract class BaseController : ControllerBase
             if (identity is null) throw new NotFoundException(nameof(User), Guid.Empty);
             
             var userClaims = identity.Claims.ToArray();
+            if (!userClaims.Any())
+            {
+                return new UserDto
+                {
+                    Id = Guid.Empty,
+                    Username = string.Empty
+                };
+            }
 
-            return new UserVm
+            return new UserDto
             {
                 Id = Guid.Parse(userClaims.FirstOrDefault(x => x.Type == "Id")!.Value),
                 Username = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value

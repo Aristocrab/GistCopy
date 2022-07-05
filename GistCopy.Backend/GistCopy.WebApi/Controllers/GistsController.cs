@@ -1,5 +1,4 @@
-﻿using GistCopy.Application.Dto;
-using GistCopy.Application.Dto.Gist;
+﻿using GistCopy.Application.Dto.Gist;
 using GistCopy.Application.Services;
 using GistCopy.WebApi.Models;
 using Mapster;

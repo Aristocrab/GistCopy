@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using FluentValidation;
 using GistCopy.Domain.Entities;
 using GistCopy.Domain.Exceptions;
-using GistCopy.Application.Dto;
 using GistCopy.Application.Dto.Gist;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +14,9 @@ namespace GistCopy.Application.Services;
 public class GistService
 {
     private readonly ApplicationDbContext _dbContext;
-    private readonly IValidator<Gist> _validator;
+    private readonly IValidator<CreateGistDto> _validator;
 
-    public GistService(ApplicationDbContext dbContext, IValidator<Gist> validator)
+    public GistService(ApplicationDbContext dbContext, IValidator<CreateGistDto> validator)
     {
         _dbContext = dbContext;
         _validator = validator;
@@ -25,11 +24,14 @@ public class GistService
     
     public List<GetGistDto> GetAll()
     {
-        // First 8 lines of text + ...
+        // First 8 lines of text + ... and Humanized date
         var config = new TypeAdapterConfig();
-        config.ForType<Gist, GetGistDto>().Map(
+        config.ForType<Gist, GetGistDto>()
+            .Map(
             dest => dest.Text,
-            src => TrimLongText(src.Text, 8));
+            src => TrimLongText(src.Text, 8))
+            .Map(dest => dest.TimeCreated,
+            src => src.TimeCreated.ToShortTimeString() + " " + src.TimeCreated.ToShortDateString());
         
         return _dbContext.Gists
             .OrderBy(g => g.TimeCreated)
@@ -39,10 +41,14 @@ public class GistService
 
     public List<GetGistDto> GetUserGists(Guid userId)
     {
+        // First 8 lines of text + ... Humanized date
         var config = new TypeAdapterConfig();
-        config.ForType<Gist, GetGistDto>().Map(
+        config.ForType<Gist, GetGistDto>()
+            .Map(
             dest => dest.Text,
-            src => TrimLongText(src.Text, 8));
+            src => TrimLongText(src.Text, 8))
+            .Map(dest => dest.TimeCreated,
+            src => src.TimeCreated.ToShortTimeString() + " " + src.TimeCreated.ToShortDateString());
         
         return _dbContext.Gists
             .OrderBy(g => g.TimeCreated)
@@ -72,25 +78,29 @@ public class GistService
         {
             throw new NotFoundException(nameof(Gist), id);
         }
+
+        var config = new TypeAdapterConfig();
+        config.NewConfig<Gist, GetGistDto>()
+            .Map(dest => dest.TimeCreated,
+            src => src.TimeCreated.ToShortTimeString() + " " + src.TimeCreated.ToShortDateString());
         
-        return gist.Adapt<GetGistDto>();
+        return gist.Adapt<GetGistDto>(config);
     }
 
     public async Task<Guid> CreateGist(CreateGistDto createGistDto)
     {
-        var gist = createGistDto.Adapt<Gist>();
-        
-        var result = await _validator.ValidateAsync(gist);
+        var result = await _validator.ValidateAsync(createGistDto);
         if (!result.IsValid)
         {
             throw new ValidationException(result.Errors);
         }
-
-        var user = _dbContext.Users.First(x => x.Id == createGistDto.UserId);
         
+        var gist = createGistDto.Adapt<Gist>();
+
+        var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == createGistDto.UserId);
         if (user is null)
         {
-            throw new NotFoundException(nameof(User), createGistDto.UserId);
+            throw new UnauthorizedException();
         }
 
         gist.User = user;

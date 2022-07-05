@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using GistCopy.Domain.Entities;
+using GistCopy.Application.Dto.User;
 
 namespace GistCopy.Application.Validators;
 
-public class UserValidator: AbstractValidator<User>
+public class LoginDtoValidator: AbstractValidator<LoginDto>
 {
-    public UserValidator()
+    public LoginDtoValidator()
     {
         RuleFor(x => x.Username).NotEmpty().MaximumLength(32);
         RuleFor(x => x.Password).NotEmpty().MaximumLength(64);

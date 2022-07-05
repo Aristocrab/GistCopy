@@ -1,13 +1,14 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using FluentValidation;
 using GistCopy.Application.Dto.User;
 using GistCopy.Domain.Entities;
 using GistCopy.Domain.Exceptions;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace GistCopy.Application.Services;
@@ -15,27 +16,42 @@ namespace GistCopy.Application.Services;
 public class UserService
 {
     private readonly ApplicationDbContext _dbContext;
-    private readonly IValidator<User> _validator;
-    
-    public UserService(ApplicationDbContext dbContext, IValidator<User> validator)
+    private readonly IValidator<LoginDto> _loginDtoValidator;
+    private readonly IValidator<RegisterDto> _registerDtoValidator;
+
+    public UserService(ApplicationDbContext dbContext, 
+        IValidator<LoginDto> loginDtoValidator, IValidator<RegisterDto> registerDtoValidator)
     {
         _dbContext = dbContext;
-        _validator = validator;
+        _loginDtoValidator = loginDtoValidator;
+        _registerDtoValidator = registerDtoValidator;
     }
 
-    public User RegisterUser(RegisterDto registerDto)
+    public async Task<User> RegisterUser(RegisterDto registerDto)
     {
+        var result = await _registerDtoValidator.ValidateAsync(registerDto);
+        if (!result.IsValid)
+        {
+            throw new ValidationException(result.Errors);
+        }
+        
         var user = registerDto.Adapt<User>();
 
         _dbContext.Users.Add(user);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
 
         return user;
     }
 
-    public User GetLoggedUser(LoginDto loginDto)
+    public async Task<User> LoginUser(LoginDto loginDto)
     {
-        var user = _dbContext.Users.FirstOrDefault(u => u.Username == loginDto.Username && 
+        var result = await _loginDtoValidator.ValidateAsync(loginDto);
+        if (!result.IsValid)
+        {
+            throw new ValidationException(result.Errors);
+        }
+        
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == loginDto.Username && 
                                                         u.Password == loginDto.Password);
         if (user is null)
         {
@@ -45,12 +61,11 @@ public class UserService
         return user;
     }
 
-    public string GenerateToken(User user, string jwtKey, string issuer, string audience)
+    public static string GenerateToken(User user, string jwtKey, string issuer, string audience)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        // todo: roles?
         var claims = new[]
         {   
             new Claim(ClaimTypes.NameIdentifier, user.Username),

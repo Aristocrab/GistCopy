@@ -24,20 +24,20 @@ public static class ServicesExtensions
                 Description = "Please insert JWT with Bearer into field",
                 Name = "Authorization",
                 Type = SecuritySchemeType.ApiKey 
-              });
-              c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-               { 
-                 new OpenApiSecurityScheme 
-                 { 
-                   Reference = new OpenApiReference 
-                   { 
-                     Type = ReferenceType.SecurityScheme,
-                     Id = "Bearer" 
-                   } 
-                  },
-                  new string[] { } 
+            });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                { 
+                    new OpenApiSecurityScheme 
+                    { 
+                        Reference = new OpenApiReference 
+                        { 
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer" 
+                        } 
+                    },
+                    Array.Empty<string>()
                 } 
-              });
+            });
         });
         
         // Auth
@@ -72,7 +72,7 @@ public static class ServicesExtensions
             options.UseSqlite(configuration.GetConnectionString(nameof(ApplicationDbContext))));
         
         // Validators
-        services.AddValidatorsFromAssemblyContaining<GistValidator>();
+        services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
         
         // Services
         services.AddScoped<GistService>();

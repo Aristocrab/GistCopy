@@ -43,6 +43,9 @@ public class CustomExceptionHandlerMiddleware
             case ForbiddenException:
                 code = HttpStatusCode.Forbidden;
                 break;
+            case UnauthorizedException:
+                code = HttpStatusCode.Unauthorized;
+                break;
         }
 
         context.Response.ContentType = "application/json";

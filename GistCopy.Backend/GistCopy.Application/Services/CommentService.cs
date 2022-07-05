@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using FluentValidation;
 using GistCopy.Domain.Entities;
 using GistCopy.Domain.Exceptions;
-using GistCopy.Application.Dto;
 using GistCopy.Application.Dto.Comment;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +14,9 @@ namespace GistCopy.Application.Services;
 public class CommentService
 {
     private readonly ApplicationDbContext _dbContext;
-    private readonly IValidator<Comment> _validator;
+    private readonly IValidator<AddCommentDto> _validator;
 
-    public CommentService(ApplicationDbContext dbContext, IValidator<Comment> validator)
+    public CommentService(ApplicationDbContext dbContext, IValidator<AddCommentDto> validator)
     {
         _dbContext = dbContext;
         _validator = validator;
@@ -34,15 +33,26 @@ public class CommentService
             throw new NotFoundException(nameof(Gist), gistId);
         }
 
+        var config = new TypeAdapterConfig();
+        config.NewConfig<Comment, GetCommentDto>()
+            .Map(dest => dest.TimeCreated,
+            src => src.TimeCreated.ToShortTimeString() + " " + src.TimeCreated.ToShortDateString());
+        
         var comments = gist.Comments.AsQueryable()
             .OrderBy(c => c.TimeCreated)
-            .ProjectToType<GetCommentDto>()
+            .ProjectToType<GetCommentDto>(config)
             .ToList();
         return comments;
     }
 
     public async Task<Guid> AddComment(AddCommentDto addCommentDto)
     {
+        var result = await _validator.ValidateAsync(addCommentDto);
+        if (!result.IsValid)
+        {
+            throw new ValidationException(result.Errors);
+        }
+        
         var gist = await _dbContext.Gists.FirstOrDefaultAsync(gist => gist.Id == addCommentDto.GistId);
 
         if (gist is null)
@@ -52,17 +62,10 @@ public class CommentService
         
         var comment = addCommentDto.Adapt<Comment>();
         
-        var result = await _validator.ValidateAsync(comment);
-        if (!result.IsValid)
-        {
-            throw new ValidationException(result.Errors);
-        }
-        
         var user = _dbContext.Users.First(x => x.Id == addCommentDto.UserId);
-        
         if (user is null)
         {
-            throw new NotFoundException(nameof(User), addCommentDto.UserId);
+            throw new UnauthorizedException();
         }
 
         comment.User = user;
