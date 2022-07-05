@@ -1,4 +1,4 @@
-using GistCopy.WebApi.Middlewares;
+using GistCopy.WebApi.Middlewares.CustomExceptionHandler;
 using GistCopy.WebApi.Middlewares.Logging;
 using GistCopy.WebApi.Services;
 
@@ -11,9 +11,14 @@ builder.AddSerilog();
 var app = builder.Build();
 
 app.UseCors("AllowAll");
+
 // Custom middlewares
 app.UseCustomExceptionHandler();
 app.UseRoutesCustomLogging();
+
+// Auth
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

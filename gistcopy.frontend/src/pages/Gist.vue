@@ -2,15 +2,18 @@
   <div class="main-column">
         <h1>Gist:</h1>
         <Gist 
-            :description="gist.description"
-            :filename="gist.filename"
-            :text="gist.text"
+            :currentUser="$attrs.currentUser"
+            :gist="gist"
         >
         </Gist>
     
         <h2 style="margin-bottom: 0;">Comments:</h2>
         <div v-if="comments.length > 0" class="comments" v-for="comment in comments">
-          <Comment :text="comment.text"></Comment>
+          <Comment 
+            :comment="comment" 
+            :currentUser="$attrs.currentUser"
+            @commentDelete="commentDelete">
+          </Comment>
         </div>
         <div v-else>
           No comments yet
@@ -43,10 +46,15 @@ export default {
         async getGistById() {
             const response = await axios.get('https://localhost:7005/api/Gists/' + this.$route.params.id)
             this.gist = response.data
+        
+            document.title = "Gist: " + response.data.description + " • Gist copy"
         },   
         async getComments() {
             const response = await axios.get("https://localhost:7005/api/Comments/"+this.$route.params.id)
             this.comments  = response.data;
+        },
+        async commentDelete() {
+            await this.getComments()
         },
         addComment() {
             this.getComments()

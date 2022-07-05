@@ -1,19 +1,21 @@
-﻿using FluentValidation;
-using GistCopy.Domain.Entities;
+﻿using System;
+using FluentValidation;
+using GistCopy.Application.Dto.Gist;
 
 namespace GistCopy.Application.Validators;
 
-public class GistValidator: AbstractValidator<Gist>
+public class CreateGistDtoValidator: AbstractValidator<CreateGistDto>
 {
-    public GistValidator()
+    public CreateGistDtoValidator()
     {
+        RuleFor(x => x.UserId).NotEqual(Guid.Empty);
         RuleFor(x => x.Description).MaximumLength(256);
         RuleFor(x => x.Filename).Must(BeAValidFilename).WithMessage("Filename must be a valid filename")
             .MaximumLength(128);
         RuleFor(x => x.Text).NotEmpty().MaximumLength(3000);
     }
     
-    private bool BeAValidFilename(string filename)
+    private static bool BeAValidFilename(string filename)
     {
         // Filenames: a.txt || .gitignore
         return filename.Contains('.') && 

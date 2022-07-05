@@ -3,7 +3,7 @@ using System.Text.Json;
 using FluentValidation;
 using GistCopy.Domain.Exceptions;
 
-namespace GistCopy.WebApi.Middlewares;
+namespace GistCopy.WebApi.Middlewares.CustomExceptionHandler;
 
 public class CustomExceptionHandlerMiddleware
 {
@@ -39,6 +39,12 @@ public class CustomExceptionHandlerMiddleware
                 break;
             case NotFoundException:
                 code = HttpStatusCode.NotFound;
+                break;
+            case ForbiddenException:
+                code = HttpStatusCode.Forbidden;
+                break;
+            case UnauthorizedException:
+                code = HttpStatusCode.Unauthorized;
                 break;
         }
 

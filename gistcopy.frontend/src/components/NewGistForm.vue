@@ -38,6 +38,10 @@ export default {
                 description: this.description,
                 filename: this.filename,
                 text: this.text,
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
+                }
             })
             await this.$router.push('/all')
         }

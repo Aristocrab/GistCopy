@@ -1,15 +1,20 @@
 <template>
     <div class="gist">
-        <router-link :to="'/gist/' + id" class="gist__description">
-            <span class="gist__description__input">{{description}}</span>
+        <router-link :to="'/gist/' + gist.id" class="gist__description" v-if="gist.user">
+            <span class="gist__description__input">
+                <span>{{gist.description}}</span> <i>by {{gist.user.username}}</i></span>
+            
+            <span class="gist__description__2">
+                {{gist.timeCreated}}
+            </span>
         </router-link>
 
         <div class="gist__filename">
-            <span class="gist__filename__input">{{filename}}</span>
+            <span class="gist__filename__input">{{gist.filename}}</span>
         </div>
 
         <div class="gist__text">
-            <pre class="gist__pre"><code>{{text}}</code></pre>
+            <pre class="gist__pre"><code>{{gist.text}}</code></pre>
         </div>
     </div>
 </template>
@@ -17,10 +22,7 @@
 <script>
 export default {
   props: {
-    id: String,
-    description: String,
-    filename: String,
-    text: String,
+    gist: {}
   }
 }
 </script>
@@ -38,8 +40,10 @@ export default {
 }
 
 /* Description */
-
 .gist__description {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
     border-radius: 4px 4px 0 0;
     height: 48px;
     line-height: 32px;
@@ -47,15 +51,15 @@ export default {
     border-bottom: var(--border);
     padding: 8px 16px 8px 16px;
     color: var(--text-color);
+    text-decoration: none;
 }
 
-.gist__description__input {
-    width: 100%;
-    height: 100%;
+.gist__description__input > span {
     border: none;
     background-color: rgba(0,0,0,0);
     color: var(--text-color);
     font-size: 16px;
+    text-decoration: underline;
 }
 
 /* Tabs */

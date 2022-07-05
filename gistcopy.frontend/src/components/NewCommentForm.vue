@@ -27,6 +27,10 @@ export default {
             await axios.post('https://localhost:7005/api/Comments/add', {
                 gistId: this.$route.params.id,
                 text: this.comment.text,
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
+                }
             })
             this.$emit('add', this.comment)
             this.comment = {

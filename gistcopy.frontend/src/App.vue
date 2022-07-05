@@ -1,16 +1,56 @@
 <template>
-  <Header></Header>
+  <Header @logged="logged" @logout="logout" :currentUser="currentUser"></Header>
   <main class="main">
-    <router-view/>
+    <router-view :currentUser="currentUser"/>
   </main>
 </template>
 
 <script>
 import Header from "@/components/Header";
+import axios from 'axios'
 
 export default {
+  data() {
+    return {
+      currentUser: undefined
+    }
+  },
   components: {
     Header
+  },
+  methods: {
+    logged() {
+        this.loggedChange()
+    },
+    async logout() {
+      localStorage.removeItem('jwtToken')
+      this.loggedChange()
+      if(this.$route.path === "/my") {
+        await this.$router.push('/all')
+      } else {
+        
+      }
+  },
+    async loggedChange() {      
+      const response = await axios.get('https://localhost:7005/api/Users/currentUser', {
+          headers: {
+              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
+          }
+      })
+      if(response.data.username !== "") {
+        this.currentUser = response.data
+      } else {
+        this.currentUser = undefined
+      }
+    }
+  },
+  watch:{
+      $route (to, from) {
+          this.loggedChange()
+      }
+  },
+  mounted() {
+      this.loggedChange()
   }
 }
 </script>

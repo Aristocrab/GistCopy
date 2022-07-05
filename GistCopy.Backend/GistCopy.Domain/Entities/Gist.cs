@@ -5,9 +5,10 @@ namespace GistCopy.Domain.Entities;
 
 public class Gist : EntityBase
 {
-    public string Description { get; set; }
-    public string Filename { get; set; }
-    public string Text { get; set; }
+    public string Description { get; set; } = null!;
+    public string Filename { get; set; } = null!;
+    public string Text { get; set; } = null!;
 
-    public List<Comment> Comments { get; set; }
+    public User User { get; set; } = null!;
+    public List<Comment> Comments { get; set; } = null!;
 }

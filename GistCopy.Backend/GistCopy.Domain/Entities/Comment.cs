@@ -4,7 +4,8 @@ namespace GistCopy.Domain.Entities;
 
 public class Comment : EntityBase
 {
-    public string Text { get; set; }
+    public string Text { get; set; } = null!;
 
-    public Gist Gist { get; set; }
+    public User User { get; set; } = null!;
+    public Gist Gist { get; set; } = null!;
 }
