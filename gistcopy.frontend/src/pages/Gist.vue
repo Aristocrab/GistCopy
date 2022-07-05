@@ -46,6 +46,8 @@ export default {
         async getGistById() {
             const response = await axios.get('https://localhost:7005/api/Gists/' + this.$route.params.id)
             this.gist = response.data
+        
+            document.title = "Gist: " + response.data.description + " • Gist copy"
         },   
         async getComments() {
             const response = await axios.get("https://localhost:7005/api/Comments/"+this.$route.params.id)

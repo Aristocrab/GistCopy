@@ -7,6 +7,9 @@
                 <a v-if="currentUser.id == gist.user.id" href="/all" @click.prevent="deleteGist"> ✖</a>
               </span>
             </span>
+            <span class="gist__description__2">
+                {{gist.timeCreated}}
+            </span>
         </div>
 
         <div class="gist__filename">
@@ -59,6 +62,9 @@ export default {
 /* Description */
 
 .gist__description {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
     border-radius: 4px 4px 0 0;
     height: 48px;
     line-height: 32px;
@@ -68,8 +74,6 @@ export default {
 }
 
 .gist__description__input {
-    width: 100%;
-    height: 100%;
     border: none;
     background-color: rgba(0,0,0,0);
     color: var(--text-color);

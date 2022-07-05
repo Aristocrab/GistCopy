@@ -25,23 +25,27 @@ export default {
     async logout() {
       localStorage.removeItem('jwtToken')
       this.loggedChange()
-      await this.$router.push('/all')
+      if(this.$route.path === "/my") {
+        await this.$router.push('/all')
+      } else {
+        
+      }
   },
-    async loggedChange() {
-      try {
-          const response = await axios.get('https://localhost:7005/api/Users/currentUser', {
-              headers: {
-                  'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
-              }
-          })
-          this.currentUser = response.data
-      } catch (error) {
-          this.currentUser = undefined
+    async loggedChange() {      
+      const response = await axios.get('https://localhost:7005/api/Users/currentUser', {
+          headers: {
+              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
+          }
+      })
+      if(response.data.username !== "") {
+        this.currentUser = response.data
+      } else {
+        this.currentUser = undefined
       }
     }
   },
   watch:{
-      $route (to, from){
+      $route (to, from) {
           this.loggedChange()
       }
   },

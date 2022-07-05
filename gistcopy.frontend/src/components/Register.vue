@@ -43,6 +43,8 @@ export default {
         openModal() {
             document.querySelector(".register-background").style.display = "block";
             document.querySelector(".register-modal-container").style.display = "flex";
+
+            document.querySelector(".register__username__input").focus()
         }, 
         async register() {
             const response = await axios.post("https://localhost:7005/api/Users/register", {
@@ -51,6 +53,8 @@ export default {
             })
             localStorage.setItem('jwtToken', response.data)
             this.$emit('logged')
+            this.username = ""
+            this.password = ""
         }
     }
 }

@@ -1,7 +1,12 @@
 <template>
     <div class="gist">
         <router-link :to="'/gist/' + gist.id" class="gist__description" v-if="gist.user">
-            <span class="gist__description__input">{{gist.description}} <i>by {{gist.user.username}}</i></span>
+            <span class="gist__description__input">
+                <span>{{gist.description}}</span> <i>by {{gist.user.username}}</i></span>
+            
+            <span class="gist__description__2">
+                {{gist.timeCreated}}
+            </span>
         </router-link>
 
         <div class="gist__filename">
@@ -35,8 +40,10 @@ export default {
 }
 
 /* Description */
-
 .gist__description {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
     border-radius: 4px 4px 0 0;
     height: 48px;
     line-height: 32px;
@@ -44,15 +51,15 @@ export default {
     border-bottom: var(--border);
     padding: 8px 16px 8px 16px;
     color: var(--text-color);
+    text-decoration: none;
 }
 
-.gist__description__input {
-    width: 100%;
-    height: 100%;
+.gist__description__input > span {
     border: none;
     background-color: rgba(0,0,0,0);
     color: var(--text-color);
     font-size: 16px;
+    text-decoration: underline;
 }
 
 /* Tabs */

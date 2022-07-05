@@ -43,6 +43,8 @@ export default {
         openModal() {
             document.querySelector(".background").style.display = "block";
             document.querySelector(".modal-container").style.display = "flex";
+
+            document.querySelector(".login__username__input").focus()
         }, 
         async login() {
             const response = await axios.post("https://localhost:7005/api/Users/login", {
@@ -51,6 +53,8 @@ export default {
             })
             localStorage.setItem('jwtToken', response.data)
             this.$emit('logged')
+            this.username = ""
+            this.password = ""
         }
     }
 }

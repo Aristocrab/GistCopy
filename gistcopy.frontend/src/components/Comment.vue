@@ -1,10 +1,15 @@
 <template>
   <div class="comment">
     <div class="comment__author">
-      {{comment.user.username}}
-      <span v-if="currentUser != undefined">
-        <a v-if="currentUser.id == comment.user.id" href="/all" @click.prevent="deleteComment"> ✖</a>
-      </span>
+        <span>
+          {{comment.user.username}}
+          <span v-if="currentUser != undefined">
+            <a v-if="currentUser.id == comment.user.id" href="/all" @click.prevent="deleteComment"> ✖</a>
+          </span>
+        </span>
+        <span>
+          {{comment.timeCreated}}
+        </span>
     </div>
     <div class="comment__text">{{comment.text}}</div>
   </div>
@@ -50,12 +55,15 @@ export default {
 /* Description */
 
 .comment__author {
+    width: 100%;
     border-radius: 4px 4px 0 0;
     height: 48px;
     line-height: 32px;
     background-color: var(--secondary-bg-color);
     border-bottom: var(--border);
     padding: 8px 16px 8px 16px;
+  justify-content: space-between;
+  display: flex;
 }
 
 /* Text */

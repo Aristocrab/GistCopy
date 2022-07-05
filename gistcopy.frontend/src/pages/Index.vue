@@ -11,6 +11,9 @@ import NewGistForm from '@/components/NewGistForm.vue';
 export default { 
     components: {
         NewGistForm
+    },
+    mounted() {
+        document.title = "New gist • Gist copy"
     }
 }
 </script>

@@ -1,6 +1,9 @@
 <template>
     <div class="main-column">
         <h1>All gists:</h1>
+        <h2 v-if="show">No gists. 
+            <router-link style="color: var(--text-color);" to="/">Create?</router-link>
+        </h2>
         <div class="gists" v-for="gist in gists">
             <GistPreview 
                 :gist="gist"
@@ -17,7 +20,8 @@ import GistPreview from '../components/GistPreview'
 export default {
     data() {
         return {
-            gists: []
+            gists: [],
+            show: false
         }
     },
     components: {
@@ -27,9 +31,13 @@ export default {
         async getAllGists() {
             const response = await axios.get('https://localhost:7005/api/Gists')
             this.gists = response.data.reverse() 
+            if(this.gists.length === 0) {
+                this.show = true
+            }
         }
     },
     mounted() {
+        document.title = "All gists • Gist copy"
         this.getAllGists()
     }
 }
