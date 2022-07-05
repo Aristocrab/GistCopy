@@ -40,6 +40,9 @@ public class CustomExceptionHandlerMiddleware
             case NotFoundException:
                 code = HttpStatusCode.NotFound;
                 break;
+            case ForbiddenException:
+                code = HttpStatusCode.Forbidden;
+                break;
         }
 
         context.Response.ContentType = "application/json";

@@ -11,12 +11,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GistCopy.Application.Services;
 
-public class GistsService
+public class GistService
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly IValidator<Gist> _validator;
 
-    public GistsService(ApplicationDbContext dbContext, IValidator<Gist> validator)
+    public GistService(ApplicationDbContext dbContext, IValidator<Gist> validator)
     {
         _dbContext = dbContext;
         _validator = validator;
@@ -31,6 +31,22 @@ public class GistsService
             src => TrimLongText(src.Text, 8));
         
         return _dbContext.Gists
+            .OrderBy(g => g.TimeCreated)
+            .ProjectToType<GetGistDto>(config)
+            .ToList();
+    }
+
+    public List<GetGistDto> GetUserGists(Guid userId)
+    {
+        var config = new TypeAdapterConfig();
+        config.ForType<Gist, GetGistDto>().Map(
+            dest => dest.Text,
+            src => TrimLongText(src.Text, 8));
+        
+        return _dbContext.Gists
+            .OrderBy(g => g.TimeCreated)
+            .Include(x => x.User)
+            .Where(x => x.User.Id == userId)
             .ProjectToType<GetGistDto>(config)
             .ToList();
     }
@@ -48,14 +64,15 @@ public class GistsService
 
     public async Task<GetGistDto> GetGistById(Guid id)
     {
-        var gist = await _dbContext.Gists.AsNoTracking().FirstOrDefaultAsync(gist => gist.Id == id);
+        var gist = await _dbContext.Gists.Include(g => g.User).AsNoTracking()
+            .FirstOrDefaultAsync(gist => gist.Id == id);
 
-        if (gist is not null)
+        if (gist is null)
         {
-            return gist.Adapt<GetGistDto>();
+            throw new NotFoundException(nameof(Gist), id);
         }
-
-        throw new NotFoundException(nameof(Gist), id);
+        
+        return gist.Adapt<GetGistDto>();
     }
 
     public async Task<Guid> CreateGist(CreateGistDto createGistDto)
@@ -68,19 +85,35 @@ public class GistsService
             throw new ValidationException(result.Errors);
         }
 
+        var user = _dbContext.Users.First(x => x.Id == createGistDto.UserId);
+        
+        if (user is null)
+        {
+            throw new NotFoundException(nameof(User), createGistDto.UserId);
+        }
+
+        gist.User = user;
         _dbContext.Gists.Add(gist);
         await _dbContext.SaveChangesAsync();
 
         return gist.Id;
     }
 
-    public async Task DeleteGist(Guid id)
+    public async Task DeleteGist(Guid id, Guid userId)
     {
-        var gist = await _dbContext.Gists.FirstOrDefaultAsync(gist => gist.Id == id);
-        if (gist is not null)
+        var gist = await _dbContext.Gists.Include(x => x.User)
+            .FirstOrDefaultAsync(gist => gist.Id == id);
+        if (gist is null)
         {
-            _dbContext.Gists.Remove(gist);
-            await _dbContext.SaveChangesAsync();
+            throw new NotFoundException(nameof(Gist), id);
         }
+
+        if (gist.User.Id != userId)
+        {
+            throw new ForbiddenException(nameof(Gist), id, userId);
+        }
+        
+        _dbContext.Gists.Remove(gist);
+        await _dbContext.SaveChangesAsync();
     }
 }

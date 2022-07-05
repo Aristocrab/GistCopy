@@ -1,4 +1,6 @@
 <template>
+    <Login ref="login" @logged="logged"></Login>
+    <Register ref="register" @logged="logged"></Register>
   <header class="header">
     <nav class="nav">
         <div class="left">
@@ -10,7 +12,7 @@
                     <li class="nav__listitem">
                         <router-link to="/all">All gists</router-link>
                     </li>
-                    <li class="nav__listitem">
+                    <li v-if="currentUser !== undefined" class="nav__listitem">
                         <router-link to="/my">My gists</router-link>
                     </li>
                 </ul>
@@ -19,8 +21,19 @@
         <div class="right">
             <span class="nav__items">
                 <ul class="nav__list">
-                    <li class="nav__listitem">
-                        <a href="#">Login</a>
+                    <li v-if="currentUser === undefined" class="nav__listitem">
+                        <a href="/" @click.prevent="openLoginModal">Login</a>
+                    </li>
+                    <li v-if="currentUser === undefined" class="nav__listitem">
+                        <a href="/" @click.prevent="openRegisterModal">Register</a>
+                    </li>
+
+                    <li v-if="currentUser !== undefined" class="nav__listitem">
+                        <img  src="https://i.picsum.photos/id/237/300/300.jpg?hmac=9iUR3VHqf0Y9abGyuPZTpEIxHJL0sSvyNtJtDIMSylM" alt="">
+                        {{currentUser.username}}
+                    </li>
+                    <li v-if="currentUser !== undefined" class="nav__listitem">
+                        <a href="/" @click.prevent="logout">Logout</a>
                     </li>
                 </ul>
             </span>
@@ -28,6 +41,37 @@
     </nav>
 </header>
 </template>
+
+<script>
+import Login from './Login'
+import Register from './Register'
+
+export default { 
+    props: {
+        currentUser: undefined
+    },
+    components: {
+        Login,
+        Register
+    },
+    methods: {
+        openLoginModal() {
+            this.$refs.login.openModal()
+        },
+        openRegisterModal() {
+            this.$refs.register.openModal()
+        },
+        logout() {
+            this.$emit('logout')
+        },
+        logged() {
+            this.$refs.login.closeModal()
+            this.$refs.register.closeModal()
+            this.$emit('logged')
+        }
+    }
+}
+</script>
 
 <style>
 .header {
@@ -59,7 +103,20 @@
     margin: 0;
     padding: 0;
     display: inline-flex;
+    align-items: center;
     list-style-type: none;
+}
+
+.nav__listitem {
+    gap: 6px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.nav__listitem > img {
+    border-radius: 100%;
+    border: var(--border);
+    width: 30px;
 }
 
 .nav__listitem > a {

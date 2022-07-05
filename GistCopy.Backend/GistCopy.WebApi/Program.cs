@@ -11,9 +11,14 @@ builder.AddSerilog();
 var app = builder.Build();
 
 app.UseCors("AllowAll");
+
 // Custom middlewares
 app.UseCustomExceptionHandler();
 app.UseRoutesCustomLogging();
+
+// Auth
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

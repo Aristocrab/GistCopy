@@ -3,10 +3,7 @@
         <h1>All gists:</h1>
         <div class="gists" v-for="gist in gists">
             <GistPreview 
-                v-bind:id="gist.id"
-                v-bind:description="gist.description"
-                v-bind:filename="gist.filename"
-                v-bind:text="gist.text"
+                :gist="gist"
             >
             </GistPreview>
         </div>

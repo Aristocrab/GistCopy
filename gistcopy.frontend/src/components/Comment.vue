@@ -1,14 +1,36 @@
 <template>
   <div class="comment">
-    <div class="comment__author">Vlad</div>
-    <div class="comment__text">{{text}}</div>
+    <div class="comment__author">
+      {{comment.user.username}}
+      <span v-if="currentUser != undefined">
+        <a v-if="currentUser.id == comment.user.id" href="/all" @click.prevent="deleteComment"> ✖</a>
+      </span>
+    </div>
+    <div class="comment__text">{{comment.text}}</div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   props: {
-    text: String
+    comment: {},
+    currentUser: undefined
+  },
+  methods: {
+    async deleteComment() {
+      let del = confirm("Delete?")
+      if (del) {
+        await axios.delete("https://localhost:7005/api/Comments/" + this.comment.id,
+            {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
+                }
+            })
+        this.$emit('commentDelete', this.comment)
+      }
+    }
   }
 }
 </script>
@@ -40,5 +62,10 @@ export default {
 
 .comment__text {
     padding: 16px;
+}
+
+a {
+  color: crimson !important;
+  text-decoration: none;
 }
 </style>

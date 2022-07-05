@@ -1,15 +1,15 @@
 <template>
     <div class="gist">
-        <router-link :to="'/gist/' + id" class="gist__description">
-            <span class="gist__description__input">{{description}}</span>
+        <router-link :to="'/gist/' + gist.id" class="gist__description" v-if="gist.user">
+            <span class="gist__description__input">{{gist.description}} <i>by {{gist.user.username}}</i></span>
         </router-link>
 
         <div class="gist__filename">
-            <span class="gist__filename__input">{{filename}}</span>
+            <span class="gist__filename__input">{{gist.filename}}</span>
         </div>
 
         <div class="gist__text">
-            <pre class="gist__pre"><code>{{text}}</code></pre>
+            <pre class="gist__pre"><code>{{gist.text}}</code></pre>
         </div>
     </div>
 </template>
@@ -17,10 +17,7 @@
 <script>
 export default {
   props: {
-    id: String,
-    description: String,
-    filename: String,
-    text: String,
+    gist: {}
   }
 }
 </script>

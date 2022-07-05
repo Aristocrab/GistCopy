@@ -1,18 +1,20 @@
 <template>
     <div class="gist">
         <div class="gist__description">
-            <span class="gist__description__input">
-              {{description}}
-              <a href="/all" @click.prevent="deleteGist">✖</a>
+            <span class="gist__description__input" v-if="gist.user">
+              {{gist.description}} <i>by {{gist.user.username}}</i>
+              <span v-if="currentUser != undefined">
+                <a v-if="currentUser.id == gist.user.id" href="/all" @click.prevent="deleteGist"> ✖</a>
+              </span>
             </span>
         </div>
 
         <div class="gist__filename">
-            <span class="gist__filename__input">{{filename}}</span>
+            <span class="gist__filename__input">{{gist.filename}}</span>
         </div>
 
         <div class="gist__text">
-            <pre class="gist__pre"><code>{{text}}</code></pre>
+            <pre class="gist__pre"><code>{{gist.text}}</code></pre>
         </div>
     </div>
 </template>
@@ -22,16 +24,19 @@ import axios from 'axios';
 
 export default {
   props: {
-    id: String,
-    description: String,
-    filename: String,
-    text: String,
+    gist: {},
+    currentUser: undefined,
   },
   methods: {
     async deleteGist() {
       let del = confirm("Delete?")
       if (del) {
-        await axios.delete("https://localhost:7005/api/Gists/"+this.$route.params.id)
+        await axios.delete("https://localhost:7005/api/Gists/" + this.$route.params.id,
+            {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
+                }
+            })
         await this.$router.push('/all')
       }
     }
