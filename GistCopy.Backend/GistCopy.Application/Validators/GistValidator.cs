@@ -13,7 +13,7 @@ public class GistValidator: AbstractValidator<Gist>
         RuleFor(x => x.Text).NotEmpty().MaximumLength(3000);
     }
     
-    private bool BeAValidFilename(string filename)
+    private static bool BeAValidFilename(string filename)
     {
         // Filenames: a.txt || .gitignore
         return filename.Contains('.') && 

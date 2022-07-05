@@ -6,6 +6,7 @@ using FluentValidation;
 using GistCopy.Domain.Entities;
 using GistCopy.Domain.Exceptions;
 using GistCopy.Application.Dto;
+using GistCopy.Application.Dto.Comment;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,4 +1,4 @@
-﻿namespace GistCopy.WebApi.Middlewares;
+﻿namespace GistCopy.WebApi.Middlewares.CustomExceptionHandler;
 
 public static class CustomExceptionHandlerMiddlewareExtensions
 {

@@ -1,4 +1,5 @@
 using GistCopy.WebApi.Middlewares;
+using GistCopy.WebApi.Middlewares.CustomExceptionHandler;
 using GistCopy.WebApi.Middlewares.Logging;
 using GistCopy.WebApi.Services;
 
