@@ -1,5 +1,10 @@
 <template>
   <div class="main-column">
+        <div class="loader-container" v-if="loading">
+            <loading class="loader" :active="loading"
+            :is-full-page="true" :color="color"></loading>
+        </div>
+
         <h1>Gist:</h1>
         <Gist 
             :currentUser="$attrs.currentUser"
@@ -29,18 +34,22 @@ import axios from 'axios';
 import Gist from '../components/Gist'
 import Comment from '../components/Comment'
 import NewCommentForm from '../components/NewCommentForm'
+import Loading from 'vue3-loading-overlay'
 
 export default {
     data() {
         return {
             gist: {},
-            comments: []
+            comments: [],
+            loading: true,
+            color: 'var(--text-color)'
         }
     },
     components: {
         Gist,
         Comment,
-        NewCommentForm
+        NewCommentForm,
+        Loading,
     },
     methods: {
         async getGistById() {
@@ -63,6 +72,7 @@ export default {
     mounted() {
         this.getGistById()
         this.getComments()
+        this.loading = false
     }
 }
 </script>
@@ -73,8 +83,18 @@ export default {
     grid-column-end: 3;
     display: flex;
     flex-direction: column;
+    position: relative;
 
     margin-top: 8px;
     margin-bottom: 8px;
+}
+
+.loader-container {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 60px);
+    align-items: center;
+    justify-content: center;
 }
 </style>

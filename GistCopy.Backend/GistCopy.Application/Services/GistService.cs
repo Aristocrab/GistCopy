@@ -15,46 +15,39 @@ public class GistService
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly IValidator<CreateGistDto> _validator;
+    private readonly TypeAdapterConfig _gistPreviewConfig;
 
     public GistService(ApplicationDbContext dbContext, IValidator<CreateGistDto> validator)
     {
         _dbContext = dbContext;
         _validator = validator;
-    }
-    
-    public List<GetGistDto> GetAll()
-    {
-        // First 8 lines of text + ... and Humanized date
-        var config = new TypeAdapterConfig();
-        config.ForType<Gist, GetGistDto>()
+        
+        _gistPreviewConfig = new TypeAdapterConfig();
+        _gistPreviewConfig.ForType<Gist, GetGistDto>()
             .Map(
             dest => dest.Text,
             src => TrimLongText(src.Text, 8))
             .Map(dest => dest.TimeCreated,
             src => src.TimeCreated.ToShortTimeString() + " " + src.TimeCreated.ToShortDateString());
-        
+    }
+    
+    public List<GetGistDto> GetAll()
+    {
+        // First 8 lines of text + ...
         return _dbContext.Gists
             .OrderBy(g => g.TimeCreated)
-            .ProjectToType<GetGistDto>(config)
+            .ProjectToType<GetGistDto>(_gistPreviewConfig)
             .ToList();
     }
 
     public List<GetGistDto> GetUserGists(Guid userId)
     {
-        // First 8 lines of text + ... Humanized date
-        var config = new TypeAdapterConfig();
-        config.ForType<Gist, GetGistDto>()
-            .Map(
-            dest => dest.Text,
-            src => TrimLongText(src.Text, 8))
-            .Map(dest => dest.TimeCreated,
-            src => src.TimeCreated.ToShortTimeString() + " " + src.TimeCreated.ToShortDateString());
-        
+        // First 8 lines of text + ...
         return _dbContext.Gists
             .OrderBy(g => g.TimeCreated)
             .Include(x => x.User)
             .Where(x => x.User.Id == userId)
-            .ProjectToType<GetGistDto>(config)
+            .ProjectToType<GetGistDto>(_gistPreviewConfig)
             .ToList();
     }
 

@@ -12,24 +12,22 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      currentUser: undefined
+        currentUser: undefined
     }
   },
   components: {
-    Header
+    Header,
   },
   methods: {
     logged() {
         this.loggedChange()
     },
     async logout() {
-      localStorage.removeItem('jwtToken')
-      this.loggedChange()
-      if(this.$route.path === "/my") {
-        await this.$router.push('/all')
-      } else {
-        
-      }
+        localStorage.removeItem('jwtToken')
+        this.loggedChange()
+        if(this.$route.path === "/my") {
+            await this.$router.push('/all')
+        }
   },
     async loggedChange() {      
       const response = await axios.get('https://localhost:7005/api/Users/currentUser', {
@@ -38,9 +36,9 @@ export default {
           }
       })
       if(response.data.username !== "") {
-        this.currentUser = response.data
+            this.currentUser = response.data
       } else {
-        this.currentUser = undefined
+            this.currentUser = undefined
       }
     }
   },
@@ -50,7 +48,7 @@ export default {
       }
   },
   mounted() {
-      this.loggedChange()
+    this.loggedChange()
   }
 }
 </script>
