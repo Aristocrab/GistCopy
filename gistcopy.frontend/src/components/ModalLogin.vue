@@ -1,18 +1,19 @@
 <template>
-    <div class="background" @click="closeModal">
-        
-    </div>
+    <div class="background" @click="closeModal"></div>
 
     <div class="modal-container">
         <div class="modal">
             <h2>Login:</h2>
+
             <form method="post" @submit.prevent>
                 <div class="login">
                     <div class="login__username">
-                        <input required v-model="username" name="username" class="login__username__input" type="text" placeholder="Username...">
+                        <input required v-model="username" name="username" class="login__username__input" 
+                            type="text" placeholder="Username...">
                     </div>
                     <div class="login__password">
-                        <input required v-model="password" name="password" class="login__password__input" type="password" placeholder="Password...">
+                        <input required v-model="password" name="password" class="login__password__input" 
+                            type="password" placeholder="Password...">
                     </div>
                 </div> 
 
@@ -20,6 +21,7 @@
                     <button @click="login" class="login__button gist__submit-button" type="submit">Login</button>
                 </div>
             </form>
+            
         </div>
     </div>
 </template>

@@ -85,8 +85,8 @@ export default {
     flex-direction: column;
     position: relative;
 
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: 16px;
+    margin-bottom: 16px;
 }
 
 .loader-container {

@@ -6,7 +6,7 @@
         </div>
 
         <h1>All gists:</h1>
-        <h2 v-if="show">No gists. 
+        <h2 v-if="show">No public gists. 
             <router-link style="color: var(--text-color);" to="/">Create?</router-link>
         </h2>
         <div class="gists" v-for="gist in gists">
@@ -41,7 +41,7 @@ export default {
             const response = await axios.get('https://localhost:7005/api/Gists')
             
             this.loading = false
-            if(response.data.reverse === 0) {
+            if(response.data.length === 0) {
                 this.show = true
             }
             this.gists = response.data.reverse() 
@@ -62,8 +62,8 @@ export default {
     flex-direction: column;
     position: relative;
 
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: 16px;
+    margin-bottom: 16px;
 }
 
 .loader-container {

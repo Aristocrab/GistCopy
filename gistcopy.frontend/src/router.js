@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
+// pages
 import Index from './pages/Index.vue'
 import AllGists from './pages/AllGists.vue'
 import MyGists from './pages/MyGists.vue'
-import Gist from './pages/Gist.vue'
+import GistById from './pages/GistById.vue'
 
 const routes = [
   {
@@ -18,7 +19,7 @@ const routes = [
   {
     path: '/gist/:id',
     name: 'gist',
-    component: Gist
+    component: GistById
   },
   {
     path: '/my',

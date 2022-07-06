@@ -35,6 +35,7 @@ public class GistService
     {
         // First 8 lines of text + ...
         return _dbContext.Gists
+            .Where(g => !g.Private)
             .OrderBy(g => g.TimeCreated)
             .ProjectToType<GetGistDto>(_gistPreviewConfig)
             .ToList();

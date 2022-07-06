@@ -1,18 +1,19 @@
 <template>
-    <div class="register-background" @click="closeModal">
-        
-    </div>
+    <div class="register-background" @click="closeModal"></div>
 
     <div class="register-modal-container">
         <div class="modal">
             <h2>Register:</h2>
+
             <form method="post" @submit.prevent>
                 <div class="register">
                     <div class="register__username">
-                        <input required v-model="username" name="username" class="register__username__input" type="text" placeholder="Username...">
+                        <input required v-model="username" name="username" class="register__username__input" 
+                            type="text" placeholder="Username...">
                     </div>
                     <div class="register__password">
-                        <input required v-model="password" name="password" class="register__password__input" type="password" placeholder="Password...">
+                        <input required v-model="password" name="password" class="register__password__input" 
+                            type="password" placeholder="Password...">
                     </div>
                 </div> 
 
@@ -20,6 +21,7 @@
                     <button @click="register" class="register__button gist__submit-button" type="submit">Register</button>
                 </div>
             </form>
+
         </div>
     </div>
 </template>
@@ -97,8 +99,6 @@ export default {
     flex-direction: column;
     width: 100%; 
 }
-
-/* Description */
 
 .register__username {
     border-radius: 4px 4px 0 0;

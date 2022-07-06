@@ -1,15 +1,16 @@
 <template>
-  <form method="post" @submit.prevent>
+    <form method="post" @submit.prevent>
     
-    <div class="comment">
-    <div class="comment__text">
-      <input required v-model="comment.text" name="description" class="comment__text__input" type="text" placeholder="Comment...">
-    </div>
-  </div>
-    
-    <div class="gist__buttons">
+        <div class="comment">
+            <div class="comment__text">
+                <input required v-model="comment.text" name="description" class="comment__text__input" type="text" placeholder="Comment...">
+            </div>
+        </div>
+        
+        <div class="gist__buttons">
             <button @click="addComment" class="gist__button gist__submit-button" type="submit">Add comment</button>
         </div>
+
     </form>
 </template>
 
@@ -54,7 +55,6 @@ export default {
 }
 
 /* Description */
-
 .comment__author {
     border-radius: 4px 4px 0 0;
     height: 48px;

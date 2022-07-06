@@ -1,18 +1,27 @@
 <template>
     <form method="post" @submit.prevent>
         <div class="gist">
+
             <div class="gist__description">
-                <input required v-model="description" name="description" class="gist__description__input" type="text" placeholder="Gist description...">
+                <input required v-model="description" name="description" class="gist__description__input" 
+                    type="text" placeholder="Gist description...">
+
+                <span class="private">
+                    <input type="checkbox" name="private" id="private">
+                    <label for="private">Private?</label>
+                </span>
             </div>
 
             <div class="gist__filename">
-                <input oninvalid="this.setCustomValidity('Enter a filename')" required pattern="[\w.]*\.\w+" v-model="filename" name="filename" class="gist__filename__input" type="text" placeholder="Filename...">
+                <input oninvalid="this.setCustomValidity('Enter a filename')" required pattern="[\w.]*\.\w+" 
+                    v-model="filename" name="filename" class="gist__filename__input" type="text" placeholder="Filename...">
             </div>
 
             <div class="gist__editor">
                 <pre class="gist__pre"><code><textarea required v-model="text" name="text" placeholder="Your code here..." 
                     class="gist__editor__textarea" wrap='off'></textarea></code></pre>
             </div>
+
         </div> 
 
         <div class="gist__buttons">
@@ -38,12 +47,13 @@ export default {
                 description: this.description,
                 filename: this.filename,
                 text: this.text,
+                private: true
             }, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
                 }
             })
-            await this.$router.push('/all')
+            await this.$router.push('/my')
         }
     } 
 }
@@ -60,9 +70,16 @@ export default {
     background-color: var(--main-bg-color);
 }
 
+.private {
+    display: flex;
+    gap: 5px;
+    color: var(--text-color);
+}
+
 /* Description */
 
 .gist__description {
+    display: flex;
     border-radius: 16px 16px 0 0;
     height: 48px;
     line-height: 32px;

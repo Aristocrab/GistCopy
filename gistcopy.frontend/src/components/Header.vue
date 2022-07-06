@@ -1,61 +1,62 @@
 <template>
-    <Login ref="login" @logged="logged"></Login>
-    <Register ref="register" @logged="logged"></Register>
-  <header class="header">
-    <nav class="nav">
-        <div class="left">
-            <span class="nav__items">
-                <ul class="nav__list">
-                    <li class="nav__listitem">
-                        <router-link v-if="$route.path === '/'" class="active" to="/">Home</router-link>
-                        <router-link v-else="$route.path === '/'" to="/">Home</router-link>
-                    </li>
-                    <li class="nav__listitem">
-                        <router-link v-if="$route.path === '/all'" class="active" to="/all">All gists</router-link>
-                        <router-link v-else="$route.path === '/all'" to="/all">All gists</router-link>
-                    </li>
-                    <li v-if="currentUser !== undefined" class="nav__listitem">
-                        <router-link v-if="$route.path === '/my'" class="active" to="/my">My gists</router-link>
-                        <router-link v-else="$route.path === '/my'" to="/my">My gists</router-link>
-                    </li>
-                </ul>
-            </span>
-        </div>
-        <div class="right">
-            <span class="nav__items">
-                <ul class="nav__list">
-                    <li v-if="currentUser === undefined" class="nav__listitem">
-                        <a href="/" @click.prevent="openLoginModal">Login</a>
-                    </li>
-                    <li v-if="currentUser === undefined" class="nav__listitem">
-                        <a href="/" @click.prevent="openRegisterModal">Register</a>
-                    </li>
+    <!-- Modals -->
+    <ModalLogin ref="login" @logged="logged"></ModalLogin>
+    <ModalRegister ref="register" @logged="logged"></ModalRegister>
 
-                    <li style="display: flex; gap: 4px" v-if="currentUser !== undefined" class="nav__listitem">
-                        <img src="https://i.picsum.photos/id/237/300/300.jpg?hmac=9iUR3VHqf0Y9abGyuPZTpEIxHJL0sSvyNtJtDIMSylM" alt="">
-                        <span>{{currentUser.username}}</span>
-                    </li>
-                    <li v-if="currentUser !== undefined" class="nav__listitem">
-                        <a href="/" @click.prevent="logout">Logout</a>
-                    </li>
-                </ul>
-            </span>
-        </div>
-    </nav>
-</header>
+    <header class="header">
+        <nav class="nav">
+            <div class="left">
+                <span class="nav__items">
+                    <ul class="nav__list">
+                        <li class="nav__listitem">
+                            <router-link :class="{ active: $route.path === '/' }" to="/">Home</router-link>
+                        </li>
+                        <li class="nav__listitem">
+                            <router-link :class="{ active: $route.path === '/all' }" to="/all">All gists</router-link>
+                        </li>
+                        <li v-if="currentUser !== undefined" class="nav__listitem">
+                            <router-link :class="{ active: $route.path === '/my' }" to="/my">My gists</router-link>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+
+            <div class="right">
+                <span class="nav__items">
+                    <ul class="nav__list">
+                        <li v-if="currentUser === undefined" class="nav__listitem">
+                            <a href="/" @click.prevent="openLoginModal">Login</a>
+                        </li>
+                        <li v-if="currentUser === undefined" class="nav__listitem">
+                            <a href="/" @click.prevent="openRegisterModal">Register</a>
+                        </li>
+
+                        <!-- If logged -->
+                        <li style="display: flex; gap: 4px" v-if="currentUser !== undefined" class="nav__listitem">
+                            <img src="https://i.picsum.photos/id/237/300/300.jpg?hmac=9iUR3VHqf0Y9abGyuPZTpEIxHJL0sSvyNtJtDIMSylM" alt="">
+                            <span>{{currentUser.username}}</span>
+                        </li>
+                        <li v-if="currentUser !== undefined" class="nav__listitem">
+                            <a href="/" @click.prevent="logout">Logout</a>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+        </nav>
+    </header>
 </template>
 
 <script>
-import Login from './Login'
-import Register from './Register'
+import ModalLogin from './ModalLogin'
+import ModalRegister from './ModalRegister'
 
 export default { 
     props: {
         currentUser: undefined
     },
     components: {
-        Login,
-        Register
+        Login: ModalLogin,
+        Register: ModalRegister
     },
     emits: ["logged", "logout"],
     methods: {
@@ -128,9 +129,6 @@ export default {
     border-radius: 100%;
     border: var(--border);
     width: 30px;
-}
-
-.nav__listitem > a {
 }
 
 .nav__listitem > a {

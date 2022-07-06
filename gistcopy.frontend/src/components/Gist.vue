@@ -1,19 +1,19 @@
 <template>
     <div class="gist">
         <div class="gist__description">
-            <span class="gist__description__input" v-if="gist.user">
-              {{gist.description}} <i>by {{gist.user.username}}</i>
+            <span class="gist__description__text" v-if="gist.user">
+              {{gist.description}} <i>by {{gist.user.username}}</i> <span class="isPrivate" v-if="gist.private">private</span>
               <span v-if="currentUser != undefined">
-                <a v-if="currentUser.id == gist.user.id" href="/all" @click.prevent="deleteGist"> ✖</a>
+                <a class="deleteButton" v-if="currentUser.id == gist.user.id" href="/all" @click.prevent="deleteGist"> ✖</a>
               </span>
             </span>
-            <span class="gist__description__2">
+            <span class="gist__timeCreated">
                 {{gist.timeCreated}}
             </span>
         </div>
 
         <div class="gist__filename">
-            <span class="gist__filename__input">{{gist.filename}}</span>
+            <span class="gist__filename__text">{{gist.filename}}</span>
         </div>
 
         <div class="gist__text">
@@ -40,7 +40,7 @@ export default {
                     'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
                 }
             })
-        await this.$router.push('/all')
+        await this.$router.push('/my')
       }
     }
   }
@@ -73,18 +73,23 @@ export default {
     padding: 8px 16px 8px 16px;
 }
 
-.gist__description__input {
+.isPrivate {
+    background-color: var(--main-bg-color);
+    padding: 4px;
+    border-radius: 5px;
+    border: var(--border);
+}
+
+.gist__description__text {
     border: none;
     background-color: rgba(0,0,0,0);
     color: var(--text-color);
     font-size: 16px;
 }
 
-.gist__description__input a {
+.gist__description__text a {
     color: var(--text-color);
 }
-
-/* Tabs */
 
 .gist__filename {
     padding: 8px 16px 8px 16px;
@@ -95,7 +100,7 @@ export default {
     border-bottom: var(--border);
 }
 
-.gist__filename__input {
+.gist__filename__text {
     height: 28px;
     width: 100%;
     border: none;
@@ -106,7 +111,6 @@ export default {
 }
 
 /* Editor */
-
 .gist__text {
     font-size: 16px;
     padding: 16px;
@@ -120,10 +124,5 @@ export default {
 .gist__pre > code {
     word-wrap: break-word;
     display: flex;
-}
-
-a {
-  color: crimson !important;
-  text-decoration: none;
 }
 </style>

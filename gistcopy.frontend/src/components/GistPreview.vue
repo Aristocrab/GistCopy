@@ -1,16 +1,17 @@
 <template>
     <div class="gist">
-        <router-link :to="'/gist/' + gist.id" class="gist__description" v-if="gist.user">
-            <span class="gist__description__input">
-                <span>{{gist.description}}</span> <i>by {{gist.user.username}}</i></span>
+        <router-link :to="'/gist/' + gist.id" class="gist__link" v-if="gist.user">
+            <span class="gist__description">
+                <span class="gist__description__text">{{gist.description}}</span> <i>by {{gist.user.username}}</i> <span class="isPrivate" v-if="gist.private">private</span>
+            </span>
             
-            <span class="gist__description__2">
+            <span class="gist__timeCreated">
                 {{gist.timeCreated}}
             </span>
         </router-link>
 
         <div class="gist__filename">
-            <span class="gist__filename__input">{{gist.filename}}</span>
+            <span class="gist__filename__text">{{gist.filename}}</span>
         </div>
 
         <div class="gist__text">
@@ -40,7 +41,7 @@ export default {
 }
 
 /* Description */
-.gist__description {
+.gist__link {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -54,7 +55,11 @@ export default {
     text-decoration: none;
 }
 
-.gist__description__input > span {
+.gist__description {
+   text-decoration: none;
+}
+
+.gist__description__text {
     border: none;
     background-color: rgba(0,0,0,0);
     color: var(--text-color);
@@ -62,7 +67,12 @@ export default {
     text-decoration: underline;
 }
 
-/* Tabs */
+.isPrivate {
+    background-color: var(--main-bg-color);
+    padding: 4px;
+    border-radius: 5px;
+    border: var(--border);
+}
 
 .gist__filename {
     padding: 8px 16px 8px 16px;
@@ -73,7 +83,7 @@ export default {
     border-bottom: var(--border);
 }
 
-.gist__filename__input {
+.gist__filename__text {
     height: 28px;
     width: 100%;
     border: none;
@@ -82,8 +92,6 @@ export default {
     font-size: 16px;
     line-height: 28px;
 }
-
-/* Editor */
 
 .gist__text {
     font-size: 16px;

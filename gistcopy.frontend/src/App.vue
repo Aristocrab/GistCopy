@@ -80,6 +80,7 @@ body {
     margin: 0;
     padding: 0;
     background-image: url('img/back.png');
+    background-size: cover;
     
     color: var(--text-color);
 }
@@ -99,8 +100,16 @@ main {
     grid-template-columns: 4fr 8fr 4fr;
 }
 
-
 h1 {
     margin: 0;
+}
+
+.deleteButton {
+    color: crimson !important;
+    text-decoration: none;
+}
+
+.deleteButton:hover {
+    color: hotpink !important;
 }
 </style>

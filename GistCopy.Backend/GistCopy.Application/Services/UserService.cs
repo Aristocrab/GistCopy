@@ -55,6 +55,7 @@ public class UserService
                                                         u.Password == loginDto.Password);
         if (user is null)
         {
+            // todo: send user not found
             throw new NotFoundException(nameof(User), Guid.Empty);
         }
 
