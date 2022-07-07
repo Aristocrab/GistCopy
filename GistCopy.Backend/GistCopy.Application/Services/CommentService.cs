@@ -22,7 +22,7 @@ public class CommentService
         _validator = validator;
     }
 
-    public async Task<List<GetCommentDto>> GetGistComments(Guid gistId)
+    public async Task<List<GetCommentVm>> GetGistComments(Guid gistId, Guid userId)
     {
         var gist = await _dbContext.Gists.AsNoTracking().Include(g => g.Comments)
             .ThenInclude(c => c.User)
@@ -30,17 +30,22 @@ public class CommentService
 
         if (gist is null)
         {
-            throw new NotFoundException(nameof(Gist), gistId);
+            throw new EntityNotFoundException(nameof(Gist), gistId);
+        }
+
+        if (gist.Private && gist.User.Id != userId)
+        {
+            throw new ForbiddenException(nameof(Comment), gistId, userId);
         }
 
         var config = new TypeAdapterConfig();
-        config.NewConfig<Comment, GetCommentDto>()
+        config.NewConfig<Comment, GetCommentVm>()
             .Map(dest => dest.TimeCreated,
             src => src.TimeCreated.ToShortTimeString() + " " + src.TimeCreated.ToShortDateString());
         
         var comments = gist.Comments.AsQueryable()
             .OrderBy(c => c.TimeCreated)
-            .ProjectToType<GetCommentDto>(config)
+            .ProjectToType<GetCommentVm>(config)
             .ToList();
         return comments;
     }
@@ -57,7 +62,7 @@ public class CommentService
 
         if (gist is null)
         {
-            throw new NotFoundException(nameof(Gist), addCommentDto.GistId);
+            throw new EntityNotFoundException(nameof(Gist), addCommentDto.GistId);
         }
         
         var comment = addCommentDto.Adapt<Comment>();
@@ -85,7 +90,7 @@ public class CommentService
         
         if (comment is null)
         {
-            throw new NotFoundException(nameof(Comment), id);
+            throw new EntityNotFoundException(nameof(Comment), id);
         }
 
         if (comment.User.Id != userId)

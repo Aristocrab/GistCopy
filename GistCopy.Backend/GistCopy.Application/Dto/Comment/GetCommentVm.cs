@@ -3,7 +3,7 @@ using GistCopy.Application.Dto.User;
 
 namespace GistCopy.Application.Dto.Comment;
 
-public class GetCommentDto
+public class GetCommentVm
 {
     public Guid Id { get; set; }
     public UserDto User { get; set; } = null!;

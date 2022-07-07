@@ -1,7 +1,5 @@
 ﻿using GistCopy.Application.Dto.Comment;
 using GistCopy.Application.Services;
-using GistCopy.WebApi.Models;
-using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,16 +15,15 @@ public class CommentsController : BaseController
     }   
     
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<List<GetCommentDto>>> GetGistComments(Guid id)
+    public async Task<ActionResult<List<GetCommentVm>>> GetGistComments(Guid id)
     {
-        return Ok(await _commentService.GetGistComments(id));
+        return Ok(await _commentService.GetGistComments(id, CurrentUser.Id));
     }
 
     [Authorize]
     [HttpPost("add")]
-    public async Task<ActionResult<Guid>> AddComment(AddCommentVm addCommentVm)
+    public async Task<ActionResult<Guid>> AddComment(AddCommentDto addCommentDto)
     {
-        var addCommentDto = addCommentVm.Adapt<AddCommentDto>();
         addCommentDto.UserId = CurrentUser.Id;
 
         var newComment = await _commentService.AddComment(addCommentDto);

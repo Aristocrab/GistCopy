@@ -1,7 +1,5 @@
 ﻿using GistCopy.Application.Dto.Gist;
 using GistCopy.Application.Services;
-using GistCopy.WebApi.Models;
-using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,29 +15,28 @@ public class GistsController : BaseController
     }
 
     [HttpGet]
-    public ActionResult<List<GetGistDto>> GetAll()
+    public ActionResult<List<GetGistVm>> GetAll()
     {
         return Ok(_gistService.GetAll());
     }
     
     [Authorize]
     [HttpGet("my")]
-    public ActionResult<List<GetGistDto>> GetUserGists()
+    public ActionResult<List<GetGistVm>> GetUserGists()
     {
         return Ok(_gistService.GetUserGists(CurrentUser.Id));
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<GetGistDto>> GetGist(Guid id)
+    public async Task<ActionResult<GetGistVm>> GetGist(Guid id)
     {
-        return Ok(await _gistService.GetGistById(id));
+        return Ok(await _gistService.GetGistById(id, CurrentUser.Id));
     }
 
     [Authorize]
     [HttpPost("new")]
-    public async Task<ActionResult<Guid>> CreateGist(CreateGistVm createGistVm)
+    public async Task<ActionResult<Guid>> CreateGist(CreateGistDto createGistDto)
     {
-        var createGistDto = createGistVm.Adapt<CreateGistDto>();
         createGistDto.UserId = CurrentUser.Id;
         
         var newGist = await _gistService.CreateGist(createGistDto);

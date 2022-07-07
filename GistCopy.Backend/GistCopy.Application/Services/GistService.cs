@@ -23,7 +23,7 @@ public class GistService
         _validator = validator;
         
         _gistPreviewConfig = new TypeAdapterConfig();
-        _gistPreviewConfig.ForType<Gist, GetGistDto>()
+        _gistPreviewConfig.ForType<Gist, GetGistVm>()
             .Map(
             dest => dest.Text,
             src => TrimLongText(src.Text, 8))
@@ -31,24 +31,24 @@ public class GistService
             src => src.TimeCreated.ToShortTimeString() + " " + src.TimeCreated.ToShortDateString());
     }
     
-    public List<GetGistDto> GetAll()
+    public List<GetGistVm> GetAll()
     {
         // First 8 lines of text + ...
         return _dbContext.Gists
             .Where(g => !g.Private)
             .OrderBy(g => g.TimeCreated)
-            .ProjectToType<GetGistDto>(_gistPreviewConfig)
+            .ProjectToType<GetGistVm>(_gistPreviewConfig)
             .ToList();
     }
 
-    public List<GetGistDto> GetUserGists(Guid userId)
+    public List<GetGistVm> GetUserGists(Guid userId)
     {
         // First 8 lines of text + ...
         return _dbContext.Gists
             .OrderBy(g => g.TimeCreated)
             .Include(x => x.User)
             .Where(x => x.User.Id == userId)
-            .ProjectToType<GetGistDto>(_gistPreviewConfig)
+            .ProjectToType<GetGistVm>(_gistPreviewConfig)
             .ToList();
     }
 
@@ -63,22 +63,27 @@ public class GistService
         return text;
     }
 
-    public async Task<GetGistDto> GetGistById(Guid id)
+    public async Task<GetGistVm> GetGistById(Guid id, Guid userId)
     {
         var gist = await _dbContext.Gists.Include(g => g.User).AsNoTracking()
             .FirstOrDefaultAsync(gist => gist.Id == id);
 
         if (gist is null)
         {
-            throw new NotFoundException(nameof(Gist), id);
+            throw new EntityNotFoundException(nameof(Gist), id);
+        }
+
+        if (gist.Private && gist.User.Id != userId)
+        {
+            throw new ForbiddenException(nameof(Gist), gist.Id, userId);
         }
 
         var config = new TypeAdapterConfig();
-        config.NewConfig<Gist, GetGistDto>()
+        config.NewConfig<Gist, GetGistVm>()
             .Map(dest => dest.TimeCreated,
             src => src.TimeCreated.ToShortTimeString() + " " + src.TimeCreated.ToShortDateString());
         
-        return gist.Adapt<GetGistDto>(config);
+        return gist.Adapt<GetGistVm>(config);
     }
 
     public async Task<Guid> CreateGist(CreateGistDto createGistDto)
@@ -110,7 +115,7 @@ public class GistService
             .FirstOrDefaultAsync(gist => gist.Id == id);
         if (gist is null)
         {
-            throw new NotFoundException(nameof(Gist), id);
+            throw new EntityNotFoundException(nameof(Gist), id);
         }
 
         if (gist.User.Id != userId)

@@ -5,5 +5,5 @@ namespace GistCopy.Domain.Exceptions;
 public class UnauthorizedException : Exception
 {
     public UnauthorizedException() 
-        : base("Request caller is not authorized") { }
+        : base("Access denied") { }
 }

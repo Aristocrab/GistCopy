@@ -14,7 +14,7 @@ public abstract class BaseController : ControllerBase
         get
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            if (identity is null) throw new NotFoundException(nameof(User), Guid.Empty);
+            if (identity is null) throw new UserNotFoundException();
             
             var userClaims = identity.Claims.ToArray();
             if (!userClaims.Any())

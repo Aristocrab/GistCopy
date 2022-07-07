@@ -37,7 +37,7 @@ public class CustomExceptionHandlerMiddleware
                 code = HttpStatusCode.BadRequest;
                 result = JsonSerializer.Serialize(validationException.Errors);
                 break;
-            case NotFoundException:
+            case EntityNotFoundException:
                 code = HttpStatusCode.NotFound;
                 break;
             case ForbiddenException:

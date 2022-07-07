@@ -55,8 +55,7 @@ public class UserService
                                                         u.Password == loginDto.Password);
         if (user is null)
         {
-            // todo: send user not found
-            throw new NotFoundException(nameof(User), Guid.Empty);
+            throw new UserNotFoundException();
         }
 
         return user;
@@ -73,6 +72,7 @@ public class UserService
             new Claim("Id", user.Id.ToString())
         };
 
+        // todo: refresh token
         var token = new JwtSecurityToken(issuer, audience, claims, expires: DateTime.Now.AddMinutes(15),
             signingCredentials: credentials);
 
