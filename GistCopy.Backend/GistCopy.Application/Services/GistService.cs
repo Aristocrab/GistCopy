@@ -31,6 +31,17 @@ public class GistService
             src => src.TimeCreated.ToShortTimeString() + " " + src.TimeCreated.ToShortDateString());
     }
     
+    private static string TrimLongText(string text, int maxLength)
+    {
+        if (text.Split('\n').Length > maxLength)
+        {
+            var lines = text.Split('\n').Take(8);
+            return string.Join('\n', lines) + "...";
+        }
+
+        return text;
+    }
+    
     public List<GetGistVm> GetAll()
     {
         // First 8 lines of text + ...
@@ -50,17 +61,6 @@ public class GistService
             .Where(x => x.User.Id == userId)
             .ProjectToType<GetGistVm>(_gistPreviewConfig)
             .ToList();
-    }
-
-    private static string TrimLongText(string text, int maxLength)
-    {
-        if (text.Split('\n').Length > maxLength)
-        {
-            var lines = text.Split('\n').Take(8);
-            return string.Join('\n', lines) + "...";
-        }
-
-        return text;
     }
 
     public async Task<GetGistVm> GetGistById(Guid id, Guid userId)

@@ -64,6 +64,11 @@ public class CommentService
         {
             throw new EntityNotFoundException(nameof(Gist), addCommentDto.GistId);
         }
+
+        if (gist.Private && addCommentDto.GistId != addCommentDto.UserId)
+        {
+            throw new ForbiddenException(nameof(Gist), addCommentDto.GistId, addCommentDto.UserId);
+        }
         
         var comment = addCommentDto.Adapt<Comment>();
         

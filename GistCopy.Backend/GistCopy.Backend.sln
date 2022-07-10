@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GistCopy.Application", "Gis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GistCopy.WebApi", "GistCopy.WebApi\GistCopy.WebApi.csproj", "{6B9A1224-8B46-4275-A538-4E1E4DEDFEBE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GistCopy.Application.Tests", "GistCopy.Application.Tests\GistCopy.Application.Tests.csproj", "{C63DFDAF-82D8-4396-9D31-101D09420E7E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{6B9A1224-8B46-4275-A538-4E1E4DEDFEBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B9A1224-8B46-4275-A538-4E1E4DEDFEBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B9A1224-8B46-4275-A538-4E1E4DEDFEBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C63DFDAF-82D8-4396-9D31-101D09420E7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C63DFDAF-82D8-4396-9D31-101D09420E7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C63DFDAF-82D8-4396-9D31-101D09420E7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C63DFDAF-82D8-4396-9D31-101D09420E7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

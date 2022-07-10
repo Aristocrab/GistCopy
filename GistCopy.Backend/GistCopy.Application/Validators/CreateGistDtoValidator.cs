@@ -15,7 +15,7 @@ public class CreateGistDtoValidator: AbstractValidator<CreateGistDto>
         RuleFor(x => x.Text).NotEmpty().MaximumLength(3000);
     }
     
-    private static bool BeAValidFilename(string filename)
+    public static bool BeAValidFilename(string filename)
     {
         // Filenames: a.txt || .gitignore
         return filename.Contains('.') && 
