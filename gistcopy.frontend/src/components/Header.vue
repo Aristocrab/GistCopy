@@ -55,8 +55,8 @@ export default {
         currentUser: undefined
     },
     components: {
-        Login: ModalLogin,
-        Register: ModalRegister
+        ModalLogin: ModalLogin,
+        ModalRegister: ModalRegister
     },
     emits: ["logged", "logout"],
     methods: {
