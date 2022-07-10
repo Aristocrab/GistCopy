@@ -75,7 +75,7 @@ export default {
     position: absolute;
     display: flex;
     width: 100%;
-    height: calc(100vh - 60px);
+    height: 100%;
     align-items: center;
     justify-content: center;
 }
