@@ -7,17 +7,18 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Events;
 
-namespace GistCopy.WebApi.Services;
+namespace GistCopy.WebApi.Extensions;
 
 public static class ServicesExtensions
 {
-    public static IServiceCollection AddServices(this IServiceCollection services,
-        IConfiguration configuration)
+    public static void AddServices(this WebApplicationBuilder builder)
     {
         // Main
-        services.AddControllers();
-        services.AddSwaggerGen(c =>
+        builder.Services.AddControllers();
+        builder.Services.AddSwaggerGen(c =>
         {
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
                 In = ParameterLocation.Header, 
@@ -40,8 +41,19 @@ public static class ServicesExtensions
             });
         });
         
+        // Logging
+        var logger = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            .WriteTo.Console()
+            .CreateLogger();
+        
+        builder.Logging.ClearProviders();
+        builder.Host.UseSerilog(logger);
+        
         // Auth
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -50,14 +62,14 @@ public static class ServicesExtensions
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["Jwt:Issuer"],
-                    ValidAudience = configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                 };
             });
         
         // CORS
-        services.AddCors(options =>
+        builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAll", policyBuilder =>
             {
@@ -68,17 +80,15 @@ public static class ServicesExtensions
         });
         
         // DbContext
-        services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlite(configuration.GetConnectionString(nameof(ApplicationDbContext))));
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlite(builder.Configuration.GetConnectionString(nameof(ApplicationDbContext))));
         
         // Validators
-        services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
         
         // Services
-        services.AddScoped<GistService>();
-        services.AddScoped<CommentService>();
-        services.AddScoped<UserService>();
-
-        return services;
+        builder.Services.AddScoped<GistService>();
+        builder.Services.AddScoped<CommentService>();
+        builder.Services.AddScoped<UserService>();
     }
 }

@@ -1,28 +1,9 @@
-using GistCopy.WebApi.Middlewares.CustomExceptionHandler;
-using GistCopy.WebApi.Middlewares.Logging;
-using GistCopy.WebApi.Services;
+using GistCopy.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Services
-builder.Services.AddServices(builder.Configuration);
-builder.AddSerilog();
+builder.AddServices();
 
 var app = builder.Build();
-
-app.UseCors("AllowAll");
-
-// Custom middlewares
-app.UseCustomExceptionHandler();
-app.UseRoutesCustomLogging();
-
-// Auth
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseCustomMiddleware();
 
 app.Run();
