@@ -9,7 +9,10 @@ public class ApplicationDbContext : DbContext
     public DbSet<Gist> Gists { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    {
+        Database.EnsureCreated();
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
