@@ -45,17 +45,21 @@ export default {
     },
     methods: {
         async createGist() {
-            await axios.post(url + 'api/Gists/new', {
+            try {
+                await axios.post(url + 'api/Gists/new', {
                 description: this.description,
                 filename: this.filename,
                 text: this.text,
                 private: this.private
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
-                }
-            })
-            await this.$router.push('/my')
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
+                    }
+                })
+                await this.$router.push('/my')
+            } catch {
+                this.$toast.error('Please log in')
+            }
         }
     } 
 }

@@ -26,17 +26,22 @@ export default {
     },
     methods: {
         async addComment() {
-            await axios.post( url + 'api/Comments/add', {
-                gistId: this.$route.params.id,
-                text: this.comment.text,
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
+            try {
+                await axios.post(url + 'api/Comments/add', {
+                    gistId: this.$route.params.id,
+                    text: this.comment.text,
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
+                    }
+                })
+                
+                this.$emit('add', this.comment)
+                this.comment = {
+                    text: ""
                 }
-            })
-            this.$emit('add', this.comment)
-            this.comment = {
-              text: ""
+            } catch {
+                this.$toast.error('Please log in')
             }
         }
     } 
