@@ -22,6 +22,7 @@
 import axios from 'axios';
 import GistPreview from '../components/GistPreview'
 import Loading from 'vue3-loading-overlay'
+import url from '@/config'
 
 export default {
     data() {
@@ -38,7 +39,7 @@ export default {
     },
     methods: {
         async getAllGists() {
-            const response = await axios.get('https://localhost:7005/api/Gists')
+            const response = await axios.get(url + 'api/Gists')
             
             this.loading = false
             if(response.data.length === 0) {

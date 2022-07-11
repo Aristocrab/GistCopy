@@ -35,6 +35,7 @@ import Gist from '../components/Gist'
 import Comment from '../components/Comment'
 import NewCommentForm from '../components/NewCommentForm'
 import Loading from 'vue3-loading-overlay'
+import url from '@/config'
 
 export default {
     data() {
@@ -53,13 +54,13 @@ export default {
     },
     methods: {
         async getGistById() {
-            const response = await axios.get('https://localhost:7005/api/Gists/' + this.$route.params.id)
+            const response = await axios.get(url + 'api/Gists/' + this.$route.params.id)
             this.gist = response.data
         
             document.title = "Gist: " + response.data.description + " • Gist copy"
         },   
         async getComments() {
-            const response = await axios.get("https://localhost:7005/api/Comments/"+this.$route.params.id)
+            const response = await axios.get(url + "api/Comments/"+this.$route.params.id)
             this.comments  = response.data;
         },
         async commentDelete() {

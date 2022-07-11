@@ -31,7 +31,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
+import url from "@/config"
 
 export default { 
     data() {
@@ -43,7 +44,7 @@ export default {
     },
     methods: {
         async createGist() {
-            await axios.post('https://localhost:7005/api/Gists/new', {
+            await axios.post(url + 'api/Gists/new', {
                 description: this.description,
                 filename: this.filename,
                 text: this.text,
@@ -71,6 +72,7 @@ export default {
 }
 
 .private {
+    align-items: center;
     display: flex;
     gap: 5px;
     color: var(--text-color);

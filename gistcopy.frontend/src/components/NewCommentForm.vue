@@ -15,7 +15,8 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "axios"
+import url from "@/config"
 
 export default {
     data() {
@@ -25,7 +26,7 @@ export default {
     },
     methods: {
         async addComment() {
-            await axios.post('https://localhost:7005/api/Comments/add', {
+            await axios.post( url + 'api/Comments/add', {
                 gistId: this.$route.params.id,
                 text: this.comment.text,
             }, {

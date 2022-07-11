@@ -8,6 +8,7 @@
 <script>
 import Header from "@/components/Header";
 import axios from 'axios'
+import url from '@/config'
 
 export default {
   data() {
@@ -16,7 +17,7 @@ export default {
     }
   },
   components: {
-    Header,
+    Header
   },
   methods: {
     logged() {
@@ -30,7 +31,7 @@ export default {
         }
   },
     async loggedChange() {      
-      const response = await axios.get('https://localhost:7005/api/Users/currentUser', {
+      const response = await axios.get(url + 'api/Users/currentUser', {
           headers: {
               'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
           }
@@ -111,5 +112,17 @@ h1 {
 
 .deleteButton:hover {
     color: hotpink !important;
+}
+
+@media screen and (max-width: 1200px) {
+    main, .header {
+        grid-template-columns: 2fr 8fr 2fr;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    main, .header {
+        grid-template-columns: 0.5fr 8fr 0.5fr;
+    }
 }
 </style>

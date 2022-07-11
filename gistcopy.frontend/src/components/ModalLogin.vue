@@ -27,7 +27,8 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "axios"
+import url from "@/config"
 
 export default { 
     data() {
@@ -49,14 +50,20 @@ export default {
             document.querySelector(".login__username__input").focus()
         }, 
         async login() {
-            const response = await axios.post("https://localhost:7005/api/Users/login", {
-                username: this.username,
-                password: this.password,
-            })
-            localStorage.setItem('jwtToken', response.data)
-            this.$emit('logged')
-            this.username = ""
-            this.password = ""
+            try {
+                const response = await axios.post(url + "api/Users/login", {
+                    username: this.username,
+                    password: this.password,
+                })
+                if(response.status != 200) throw "No such user"
+                localStorage.setItem('jwtToken', response.data)
+                this.$emit('logged')
+                this.username = ""
+                this.password = ""
+            }
+            catch {
+                this.$toast.error('No such user')
+            }
         }
     }
 }

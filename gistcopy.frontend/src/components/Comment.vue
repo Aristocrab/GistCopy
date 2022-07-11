@@ -17,6 +17,7 @@
 
 <script>
 import axios from 'axios'
+import url from '@/config'
 
 export default {
   props: {
@@ -27,7 +28,7 @@ export default {
     async deleteComment() {
       let del = confirm("Delete?")
       if (del) {
-        await axios.delete("https://localhost:7005/api/Comments/" + this.comment.id,
+        await axios.delete(url + "api/Comments/" + this.comment.id,
             {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
