@@ -1,3 +1,3 @@
-const url = "https://localhost:7005/"
+const url = "https://gistcopybackend.herokuapp.com/"
 
 export default url
