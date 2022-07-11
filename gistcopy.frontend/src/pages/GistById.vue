@@ -54,13 +54,23 @@ export default {
     },
     methods: {
         async getGistById() {
-            const response = await axios.get(url + 'api/Gists/' + this.$route.params.id)
+            const response = await axios.get(url + 'api/Gists/' + this.$route.params.id,
+            {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
+                }
+            })
             this.gist = response.data
         
             document.title = "Gist: " + response.data.description + " • Gist copy"
         },   
         async getComments() {
-            const response = await axios.get(url + "api/Comments/"+this.$route.params.id)
+            const response = await axios.get(url + "api/Comments/"+this.$route.params.id,
+            {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
+                }
+            })
             this.comments  = response.data;
         },
         async commentDelete() {
