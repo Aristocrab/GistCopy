@@ -7,7 +7,7 @@
                     type="text" placeholder="Gist description...">
 
                 <span class="private">
-                    <input type="checkbox" name="private" id="private">
+                    <input type="checkbox" name="private" id="private" v-model="private">
                     <label for="private">Private?</label>
                 </span>
             </div>
@@ -40,6 +40,7 @@ export default {
             description: '',
             filename: '',
             text: '',
+            private: false,
         }
     },
     methods: {
@@ -48,7 +49,7 @@ export default {
                 description: this.description,
                 filename: this.filename,
                 text: this.text,
-                private: true
+                private: this.private
             }, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` 
