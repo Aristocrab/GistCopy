@@ -8,7 +8,7 @@ Vue3 used for API presentation purposes only. Design is inspired by [Tailwind CS
 
 Links:
 - Backend (swagger) - [link](https://gistcopybackend.herokuapp.com/swagger/index.html)
-- Frontend (vue3) - [link](https://aristocrab.github.io/GistCopy/)
+- Frontend (vue3) (latency because of free backend hosting) - [link](https://aristocrab.github.io/GistCopy/)
 
 ## Technologies used:
 - Backend:
