@@ -1,4 +1,4 @@
-# GistCopy - Github Gist simple copy [[swagger](https://gistcopybackend.herokuapp.com/swagger/index.html)] [[demo](https://aristocrab.github.io/GistCopy/)]
+# GistCopy - Github Gist simple copy [[swagger](https://gistcopybackend.herokuapp.com/swagger/index.html)]
 
 [![GistCopy screenshot](https://i.imgur.com/YiuLidm.png)](https://aristocrab.github.io/GistCopy/)
 
@@ -8,7 +8,6 @@ Vue3 used for API presentation purposes only. Design is inspired by [Tailwind CS
 
 Links:
 - Backend (swagger) - [link](https://gistcopybackend.herokuapp.com/swagger/index.html)
-- Frontend - [link](https://aristocrab.github.io/GistCopy/)
 
 ## Technologies used:
 - Backend:
